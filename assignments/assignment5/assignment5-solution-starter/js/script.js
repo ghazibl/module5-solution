@@ -80,11 +80,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 // *** start ***
 // On first load, show home view
-showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
   allCategoriesUrl,
-  [...], // ***** <---- TODO: STEP 1: Substitute [...] ******
-  true); // Explicitly setting the flag to get JSON from server processed into an object literal
+  function(categories) {
+    console.log(categories);  // Vérifie que les données arrivent bien
+    buildAndShowHomeHTML(categories);
+  },
+  true
+);
+ // Explicitly setting the flag to get JSON from server processed into an object literal
 });
 // *** finish **
 
@@ -102,8 +106,11 @@ function buildAndShowHomeHTML (categories) {
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
       // var chosenCategoryShortName = ....
-
-
+      var chosenCategory = chooseRandomCategory(categories);
+      var chosenCategoryShortName = chosenCategory.short_name;
+      var homeHtmlToInsertIntoMainPage =
+      insertProperty(homeHtml, "randomCategoryShortName", "'" + chosenCategoryShortName + "'");
+      insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
       // chosen category from STEP 2. Use existing insertProperty function for that purpose.
       // Look through this code for an example of how to do use the insertProperty function.
